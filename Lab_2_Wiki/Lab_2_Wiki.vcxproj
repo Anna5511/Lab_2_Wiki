@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BrowserManager.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="SearchItem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
