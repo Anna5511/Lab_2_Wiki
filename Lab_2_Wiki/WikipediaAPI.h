@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -28,26 +28,26 @@ public:
         std::string encodedQuery = urlEncode(query);
         std::string url = "https://ru.wikipedia.org/w/api.php?action=query&list=search&utf8=&format=json&srsearch=" + encodedQuery;
 
-        // Формируем команду для вызова встроенного в Windows curl (ключ -s для скрытия прогресс-бара)
+        // Р¤РѕСЂРјРёСЂСѓРµРј РєРѕРјР°РЅРґСѓ РґР»СЏ РІС‹Р·РѕРІР° РІСЃС‚СЂРѕРµРЅРЅРѕРіРѕ РІ Windows curl (РєР»СЋС‡ -s РґР»СЏ СЃРєСЂС‹С‚РёСЏ РїСЂРѕРіСЂРµСЃСЃ-Р±Р°СЂР°)
         std::string cmd = "curl -s \"" + url + "\"";
 
         std::array<char, 128> buffer;
         std::string result;
 
-        // Открываем пайп для чтения вывода консольной команды
+        // РћС‚РєСЂС‹РІР°РµРј РїР°Р№Рї РґР»СЏ С‡С‚РµРЅРёСЏ РІС‹РІРѕРґР° РєРѕРЅСЃРѕР»СЊРЅРѕР№ РєРѕРјР°РЅРґС‹
         std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
 
         if (!pipe) {
-            throw std::runtime_error("Не удалось выполнить сетевой запрос.");
+            throw std::runtime_error("РќРµ СѓРґР°Р»РѕСЃСЊ РІС‹РїРѕР»РЅРёС‚СЊ СЃРµС‚РµРІРѕР№ Р·Р°РїСЂРѕСЃ.");
         }
 
-        // Читаем JSON-ответ порциями
+        // Р§РёС‚Р°РµРј JSON-РѕС‚РІРµС‚ РїРѕСЂС†РёСЏРјРё
         while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
             result += buffer.data();
         }
 
         if (result.empty()) {
-            throw std::runtime_error("Получен пустой ответ от сервера.");
+            throw std::runtime_error("РџРѕР»СѓС‡РµРЅ РїСѓСЃС‚РѕР№ РѕС‚РІРµС‚ РѕС‚ СЃРµСЂРІРµСЂР°.");
         }
 
         return result;

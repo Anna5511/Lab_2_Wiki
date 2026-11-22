@@ -1,50 +1,46 @@
-#include <iostream>
+Ôªø#include <iostream>
+#include <windows.h>
 #include "InputHandler.h"
 #include "WikipediaAPI.h"
 #include "JSONParser.h"
 #include "BrowserManager.h"
-#include "StringConverter.h"
-#include <windows.h> 
 
 int main() {
-    
+    // –¢–µ–ø–µ—Ä—å –í–°–Å –≤ UTF-8: –∏ –ª–∏—Ç–µ—Ä–∞–ª—ã (–±–ª–∞–≥–æ–¥–∞—Ä—è /utf-8), –∏ –∫–æ–Ω—Å–æ–ª—å, –∏ API
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
+
     InputHandler inputHandler;
     WikipediaAPI wikiApi;
     JSONParser parser;
 
     while (true) {
-        std::string query = inputHandler.getSearchQuery();
+        std::string query = inputHandler.getSearchQuery(); // —É–∂–µ UTF-8
 
         try {
-            std::cout << "¬˚ÔÓÎÌˇÂÏ ÔÓËÒÍ...\n";
+            std::cout << "–í—ã–ø–æ–ª–Ω—è–µ–º –ø–æ–∏—Å–∫...\n";
 
-            std::string utf8Query = StringConverter::toUTF8(query);
-            std::string jsonResponse = wikiApi.search(utf8Query);
+            std::string jsonResponse = wikiApi.search(query); // query —É–∂–µ UTF-8, urlEncode —Å–∞–º —Å–¥–µ–ª–∞–µ—Ç %XX
             std::vector<SearchItem> results = parser.parse(jsonResponse);
 
             if (results.empty()) {
-                std::cout << "œÓ ‚‡¯ÂÏÛ Á‡ÔÓÒÛ ÌË˜Â„Ó ÌÂ Ì‡È‰ÂÌÓ.\n\n";
+                std::cout << "–ü–æ –≤–∞—à–µ–º—É –∑–∞–ø—Ä–æ—Å—É –Ω–∏—á–µ–≥–æ –Ω–µ –Ω–∞–π–¥–µ–Ω–æ.\n\n";
                 continue;
             }
 
-            for (auto& item : results) {
-                item.title = StringConverter::toConsole(item.title);
-            }
-
-            inputHandler.displayResults(results);
+            inputHandler.displayResults(results); // title —É–∂–µ UTF-8 ‚Äî –Ω–µ —Ç—Ä–æ–≥–∞–µ–º
 
             int choice = inputHandler.getUserSelection(results.size());
             if (choice == 0) {
-                std::cout << "¬˚ıÓ‰ ËÁ ÔÓ„‡ÏÏ˚.\n";
+                std::cout << "–í—ã—Ö–æ–¥ –∏–∑ –ø—Ä–æ–≥—Ä–∞–º–º—ã.\n";
                 break;
             }
 
-            std::cout << "ŒÚÍ˚‚‡ÂÏ ÒÚ‡Ú¸˛ ‚ ·‡ÛÁÂÂ...\n\n";
+            std::cout << "–û—Ç–∫—Ä—ã–≤–∞–µ–º —Å—Ç–∞—Ç—å—é –≤ –±—Ä–∞—É–∑–µ—Ä–µ...\n\n";
             BrowserManager::openArticle(results[choice - 1].pageId);
-
         }
         catch (const std::exception& e) {
-            std::cerr << "\n[ ËÚË˜ÂÒÍ‡ˇ Ó¯Ë·Í‡]: " << e.what() << "\nœÓÔÓ·ÛÈÚÂ ÒÌÓ‚‡.\n\n";
+            std::cerr << "\n[–ö—Ä–∏—Ç–∏—á–µ—Å–∫–∞—è –æ—à–∏–±–∫–∞]: " << e.what() << "\n–ü–æ–ø—Ä–æ–±—É–π—Ç–µ —Å–Ω–æ–≤–∞.\n\n";
         }
     }
     return 0;

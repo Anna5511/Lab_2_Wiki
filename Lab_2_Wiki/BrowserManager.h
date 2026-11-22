@@ -1,14 +1,14 @@
-#pragma once
+п»ї#pragma once
 #include <string>
 #include <cstdlib>
 
 class BrowserManager {
 public:
-    // Метод формирует ссылку по pageId и открывает её
+    // РњРµС‚РѕРґ С„РѕСЂРјРёСЂСѓРµС‚ СЃСЃС‹Р»РєСѓ РїРѕ pageId Рё РѕС‚РєСЂС‹РІР°РµС‚ РµС‘
     static void openArticle(int pageId) {
         std::string url = "https://ru.wikipedia.org/w/index.php?curid=" + std::to_string(pageId);
 
-        // Кроссплатформенный выбор команды терминала для открытия ссылки
+        // РљСЂРѕСЃСЃРїР»Р°С‚С„РѕСЂРјРµРЅРЅС‹Р№ РІС‹Р±РѕСЂ РєРѕРјР°РЅРґС‹ С‚РµСЂРјРёРЅР°Р»Р° РґР»СЏ РѕС‚РєСЂС‹С‚РёСЏ СЃСЃС‹Р»РєРё
 #if defined(_WIN32)
         std::string cmd = "start " + url;
 #elif defined(__APPLE__)
@@ -17,7 +17,7 @@ public:
         std::string cmd = "xdg-open " + url;
 #endif
 
-        // Выполняем системную команду
+        // Р’С‹РїРѕР»РЅСЏРµРј СЃРёСЃС‚РµРјРЅСѓСЋ РєРѕРјР°РЅРґСѓ
         std::system(cmd.c_str());
     }
 };

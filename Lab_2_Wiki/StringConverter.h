@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <string>
 
 #if defined(_WIN32)
@@ -7,12 +7,12 @@
 
 class StringConverter {
 public:
-    // Перевод из кодировки консоли Windows в UTF-8 (для отправки запроса в API)
+    // РџРµСЂРµРІРѕРґ РёР· РєРѕРґРёСЂРѕРІРєРё РєРѕРЅСЃРѕР»Рё Windows РІ UTF-8 (РґР»СЏ РѕС‚РїСЂР°РІРєРё Р·Р°РїСЂРѕСЃР° РІ API)
     static std::string toUTF8(const std::string& consoleStr) {
 #if defined(_WIN32)
         if (consoleStr.empty()) return "";
 
-        int cp = GetConsoleCP(); // Получаем кодировку ввода консоли
+        int cp = GetConsoleCP(); // РџРѕР»СѓС‡Р°РµРј РєРѕРґРёСЂРѕРІРєСѓ РІРІРѕРґР° РєРѕРЅСЃРѕР»Рё
         int wlen = MultiByteToWideChar(cp, 0, consoleStr.c_str(), -1, NULL, 0);
         std::wstring wstr(wlen, 0);
         MultiByteToWideChar(cp, 0, consoleStr.c_str(), -1, &wstr[0], wlen);
@@ -21,17 +21,17 @@ public:
         std::string utf8str(utf8len, 0);
         WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &utf8str[0], utf8len, NULL, NULL);
 
-        // Удаляем нулевой символ в конце строки, который добавляет Windows API
+        // РЈРґР°Р»СЏРµРј РЅСѓР»РµРІРѕР№ СЃРёРјРІРѕР» РІ РєРѕРЅС†Рµ СЃС‚СЂРѕРєРё, РєРѕС‚РѕСЂС‹Р№ РґРѕР±Р°РІР»СЏРµС‚ Windows API
         if (!utf8str.empty() && utf8str.back() == '\0') {
             utf8str.pop_back();
         }
         return utf8str;
 #else
-        return consoleStr; // Для Linux/Mac конвертация не нужна
+        return consoleStr; // Р”Р»СЏ Linux/Mac РєРѕРЅРІРµСЂС‚Р°С†РёСЏ РЅРµ РЅСѓР¶РЅР°
 #endif
     }
 
-    // Перевод из UTF-8 (от API) в кодировку консоли Windows (для красивого вывода)
+    // РџРµСЂРµРІРѕРґ РёР· UTF-8 (РѕС‚ API) РІ РєРѕРґРёСЂРѕРІРєСѓ РєРѕРЅСЃРѕР»Рё Windows (РґР»СЏ РєСЂР°СЃРёРІРѕРіРѕ РІС‹РІРѕРґР°)
     static std::string toConsole(const std::string& utf8Str) {
 #if defined(_WIN32)
         if (utf8Str.empty()) return "";
@@ -40,7 +40,7 @@ public:
         std::wstring wstr(wlen, 0);
         MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, &wstr[0], wlen);
 
-        int cp = GetConsoleOutputCP(); // Получаем кодировку вывода консоли
+        int cp = GetConsoleOutputCP(); // РџРѕР»СѓС‡Р°РµРј РєРѕРґРёСЂРѕРІРєСѓ РІС‹РІРѕРґР° РєРѕРЅСЃРѕР»Рё
         int locallen = WideCharToMultiByte(cp, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
         std::string localStr(locallen, 0);
         WideCharToMultiByte(cp, 0, wstr.c_str(), -1, &localStr[0], locallen, NULL, NULL);

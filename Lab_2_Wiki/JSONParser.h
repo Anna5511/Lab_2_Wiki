@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <string>
 #include <vector>
 #include "SearchItem.h"
@@ -11,12 +11,12 @@ public:
     std::vector<SearchItem> parse(const std::string& jsonString) {
         std::vector<SearchItem> results;
         try {
-            // Парсим строку в JSON объект
+            // РџР°СЂСЃРёРј СЃС‚СЂРѕРєСѓ РІ JSON РѕР±СЉРµРєС‚
             json j = json::parse(jsonString);
 
-            // Проверяем, есть ли поле "query" и "search"
+            // РџСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё РїРѕР»Рµ "query" Рё "search"
             if (j.contains("query") && j["query"].contains("search")) {
-                // Проходимся по массиву результатов
+                // РџСЂРѕС…РѕРґРёРјСЃСЏ РїРѕ РјР°СЃСЃРёРІСѓ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
                 for (const auto& item : j["query"]["search"]) {
                     SearchItem searchItem;
                     searchItem.pageId = item["pageid"];
@@ -26,7 +26,7 @@ public:
             }
         }
         catch (const json::parse_error& e) {
-            std::cerr << "Ошибка парсинга JSON: " << e.what() << '\n';
+            std::cerr << "РћС€РёР±РєР° РїР°СЂСЃРёРЅРіР° JSON: " << e.what() << '\n';
         }
         return results;
     }
