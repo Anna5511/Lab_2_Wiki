@@ -124,11 +124,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BrowserManager.h" />
-    <ClInclude Include="httplib.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="JSONParser.h" />
     <ClInclude Include="SearchItem.h" />
+    <ClInclude Include="StringConverter.h" />
     <ClInclude Include="WikipediaAPI.h" />
   </ItemGroup>
   <ItemGroup>

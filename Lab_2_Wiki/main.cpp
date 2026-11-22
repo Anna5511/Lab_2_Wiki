@@ -3,13 +3,11 @@
 #include "WikipediaAPI.h"
 #include "JSONParser.h"
 #include "BrowserManager.h"
+#include "StringConverter.h"
+#include <windows.h> 
 
 int main() {
-    // Настраиваем корректный вывод кириллицы в консоль (для Windows)
-#if defined(_WIN32)
-    system("chcp 65001 > nul");
-#endif
-
+    
     InputHandler inputHandler;
     WikipediaAPI wikiApi;
     JSONParser parser;
@@ -19,8 +17,9 @@ int main() {
 
         try {
             std::cout << "Выполняем поиск...\n";
-            std::string jsonResponse = wikiApi.search(query);
 
+            std::string utf8Query = StringConverter::toUTF8(query);
+            std::string jsonResponse = wikiApi.search(utf8Query);
             std::vector<SearchItem> results = parser.parse(jsonResponse);
 
             if (results.empty()) {
@@ -28,24 +27,25 @@ int main() {
                 continue;
             }
 
-            inputHandler.displayResults(results);
-            int choice = inputHandler.getUserSelection(results.size());
+            for (auto& item : results) {
+                item.title = StringConverter::toConsole(item.title);
+            }
 
+            inputHandler.displayResults(results);
+
+            int choice = inputHandler.getUserSelection(results.size());
             if (choice == 0) {
                 std::cout << "Выход из программы.\n";
                 break;
             }
 
-            int pageIdToOpen = results[choice - 1].pageId;
             std::cout << "Открываем статью в браузере...\n\n";
-            BrowserManager::openArticle(pageIdToOpen);
+            BrowserManager::openArticle(results[choice - 1].pageId);
 
         }
         catch (const std::exception& e) {
-            // Обработка сетевых ошибок и ошибок парсинга (чтобы программа не упала)
             std::cerr << "\n[Критическая ошибка]: " << e.what() << "\nПопробуйте снова.\n\n";
         }
     }
-
     return 0;
 }

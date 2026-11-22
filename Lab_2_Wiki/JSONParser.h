@@ -3,7 +3,7 @@
 #include <vector>
 #include "SearchItem.h"
 #include "json.hpp"
-
+#include <iostream>
 using json = nlohmann::json;
 
 class JSONParser {
